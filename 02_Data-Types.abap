@@ -28,7 +28,7 @@ DATA: lv_age TYPE i VALUE 22,                                          "Integer
 *Description : ABAP data types and take input from users
 **********************************************************************
 
-*PARAMETERS: p_name TYPE c LENGTH 20,
+PARAMETERS: p_name TYPE c LENGTH 20,
             p_age TYPE i,
             p_salary TYPE p DECIMALS 2,
             p_dob TYPE d,
@@ -45,9 +45,10 @@ START-OF-SELECTION.
 **********************************************************************
 *Description : CONSTANTS
 **********************************************************************
-*CONSTANTS: c_company TYPE c LENGTH 15 VALUE 'SAP Labs India'.
-*
-*WRITE: 'Welcome to', c_company.
+
+CONSTANTS: c_company TYPE c LENGTH 15 VALUE 'SAP Labs India'.
+
+WRITE: 'Welcome to', c_company.
 
 
 
