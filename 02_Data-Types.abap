@@ -21,3 +21,31 @@ DATA: lv_age TYPE i VALUE 22,                                          "Integer
              / 'Birthday: ', lv_birthday,
              / 'Login Time: ', lv_logintime,
              / 'Address: ', lv_address.
+
+
+
+**********************************************************************
+*Description : ABAP data types and take input from users
+**********************************************************************
+
+*PARAMETERS: p_name TYPE c LENGTH 20,
+            p_age TYPE i,
+            p_salary TYPE p DECIMALS 2,
+            p_dob TYPE d,
+            p_city TYPE string.
+
+START-OF-SELECTION.
+
+   WRITE: / 'Enter Your Name: ', p_name,
+          / 'Enter your age: ', p_age,
+          / 'Enter Your salary: ', p_salary,
+          / 'Enter Birth Date: ', p_dob,
+          / 'Enter Your City: ', p_city.
+
+
+
+
+
+
+
+
