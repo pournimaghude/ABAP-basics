@@ -42,7 +42,12 @@ START-OF-SELECTION.
           / 'Enter Birth Date: ', p_dob,
           / 'Enter Your City: ', p_city.
 
-
+**********************************************************************
+*Description : CONSTANTS
+**********************************************************************
+*CONSTANTS: c_company TYPE c LENGTH 15 VALUE 'SAP Labs India'.
+*
+*WRITE: 'Welcome to', c_company.
 
 
 
