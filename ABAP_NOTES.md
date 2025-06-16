@@ -1,10 +1,10 @@
 # Introduction to ABAP
 
-## 🔹 What is ABAP?
+### 🔹 What is ABAP?
 
-**ABAP (Advanced Business Application Programming)** is a high-level programming language created by **SAP**. It is used to develop business applications in the SAP ecosystem, especially in SAP S/4HANA systems.
+**ABAP** stands “**A**dvanced **B**usiness **A**pplication **P**rogramming”. it is a high-level programming language Created by German Software Company **SAP**. It is used to develop business applications in the SAP ecosystem, especially in SAP S/4HANA systems.
 
-## 🔹 Main Purpose of ABAP
+### 🔹 Main Purpose of ABAP
 
 ABAP is mainly used for:
 - Customizing SAP standard applications
@@ -12,7 +12,7 @@ ABAP is mainly used for:
 - Handling business logic inside SAP systems
 - Building interfaces with other systems
 
-## 🔹 What Can We Do Using ABAP?
+### 🔹 What Can We Do Using ABAP?
 
 Here are some important things you can build using ABAP:
 
@@ -28,9 +28,7 @@ Here are some important things you can build using ABAP:
 | CDS Views | Define reusable database views for analytics (SAP HANA) |
 | OData Services | Create services for SAP Fiori or mobile apps |
 
-
-
-## 🔹 Benefits of ABAP
+### 🔹 Benefits of ABAP
 
 -  **Powerful**: Handles large business processes in real-time
 -  **Integrated**: Works tightly with SAP database and UI
@@ -39,8 +37,7 @@ Here are some important things you can build using ABAP:
 -  **Scalable**: Supports both small and large business applications
 -  **Modern**: Supports object-oriented and modular programming
 
-
-## 🔹 Where is ABAP Used?
+### 🔹 Where is ABAP Used?
 
 ABAP is mainly used in:
 - **SAP ERP** (like SAP ECC, SAP S/4HANA)
@@ -48,16 +45,14 @@ ABAP is mainly used in:
 - **SAP CRM**, **SAP HR**, and other modules
 - **SAP Fiori Backend** (via OData services)
 
-
-## 🔹 Why Should You Learn ABAP?
+### 🔹 Why Should You Learn ABAP?
 
 -  You want to become a **SAP Technical Consultant or Developer**
 -  You’re working in a company using SAP
 -  You enjoy solving real business problems with code
 -  There is a strong career demand in ABAP + SAP S/4HANA
 
-
-## 🔹 1. Simple Example
+### 🔹 1. Simple Example
 
 Here’s a very basic ABAP program:
 ```abap
@@ -65,19 +60,17 @@ REPORT zhello_world.
 
 WRITE 'Hello, SAP World!'.
 ```
----
 
-## 🔹 2. Data Types in ABAP
+### 🔹 2. Data Types in ABAP
 
-### What are Data Types?
+#### What are Data Types?
 
 Data types define **what kind of data** a variable can hold — like numbers, text, dates, etc.
 
 In ABAP, you can use **predefined** or **custom** data types to declare variables.
 
----
 
-### 🔸 Common Predefined Data Types
+#### 🔸 Common Predefined Data Types
 
 | Data Type | Meaning | Example |
 |-----------|---------|---------|
@@ -90,20 +83,17 @@ In ABAP, you can use **predefined** or **custom** data types to declare variable
 | `F`       | Floating-point number | `DATA value TYPE f.` |
 | `STRING`  | Variable-length text | `DATA note TYPE string.` |
 
----
-
-### 🔸 Declaring Variables
+#### 🔸 Declaring Variables
 
 ```abap
 DATA: v_name TYPE c LENGTH 10,
       v_age TYPE i,
       v_salary TYPE p DECIMALS 2.
 ```
----
 
-## 🔹 3. Constants and Parameters
+### 🔹 3. Constants and Parameters
 
-###  What are Constants?
+####  What are Constants?
 
 - A **constant** is a fixed value that **never changes** during program execution.
 - It is declared using the keyword `CONSTANTS`.
@@ -113,7 +103,7 @@ DATA: v_name TYPE c LENGTH 10,
 CONSTANTS: <const_name> TYPE <type> VALUE <value>.
 ```
 
-### What are Parameters?
+#### What are Parameters?
 - **PARAMETERS** are input fields shown to the user when the program runs.
 - Useful for interactive reports or user input-based logic.
 
