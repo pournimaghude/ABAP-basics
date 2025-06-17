@@ -51,6 +51,13 @@ CONSTANTS: c_company TYPE c LENGTH 15 VALUE 'SAP Labs India'.
 WRITE: 'Welcome to', c_company.
 
 
+*EXAMPLE - 2
+**********************************************************************
+CONSTANTS : c_company TYPE c LENGTH 20 VALUE 'Pournima Ghude'.
+
+    WRITE : 'Hello, Miss ', c_company.
+
+
 
 
 
