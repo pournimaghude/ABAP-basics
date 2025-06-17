@@ -298,9 +298,9 @@ ENDLOOP.
 - `APPEND` → `add work area to internal table`
 - `LOOP AT` → `read each row one by one`
 
-## 🔹6. READ, MODIFY, DELETE Internal Table
+###🔹 READ, MODIFY, DELETE Internal Table
 
-### 🔸 6.1 READ TABLE
+#### 🔸READ TABLE
 - Find a row by condition:
 
 ```abap
@@ -315,7 +315,7 @@ sy-subrc = 0 → means match found
 
 ````
 
-### 🔸6.2 MODIFY TABLE
+#### 🔸MODIFY TABLE
 - Update data in a specific row:
 
 ```abap
@@ -327,7 +327,7 @@ IF sy-subrc = 0.
   WRITE: / 'Age updated to 25'.
 ENDIF.
 ```
-### 🔸6.3 DELETE FROM TABLE
+#### 🔸 DELETE FROM TABLE
 - Remove an entry:
 
 ```abap
@@ -338,4 +338,70 @@ LOOP AT lt_students INTO wa_student.
 ENDLOOP.
 ```
 
-## 🧠 What is Open SQL?
+## 🔹6. What is Open SQL?
+
+-  **Open SQL** is used in ABAP to read data from SAP database tables and store it in internal tables or variables.
+- It allows you to select, filter, sort, and join data from SAP tables like MARA, VBAK, KNA1, etc.
+
+  #### Why It's Called "Open" SQL?
+  - Because it's standard and works on any SAP-supported database (Oracle, HANA, etc.)
+  - ABAP handles the database-specific part internally.
+
+ ### Real-Life Example 
+  **Imagine you have an Excel sheet with all customer details:**
+|Customer No|Name|	City|
+|-----------|-----|------|
+|1001|	Ramesh	|Pune|
+|1002|	Suresh|	Mumbai|
+|1003|	Priya|	Delhi|
+  - In SAP, this customer data is stored in a table like KNA1.
+  - You can use Open SQL in ABAP to get this data and show it in your program.
+
+   **SAP Table: KNA1**
+   - It stores Customer Master data.
+
+|Field Name|	Meaning|
+|-----------|-----|
+|KUNNR|	Customer Number|
+|NAME1	|Customer Name|
+|ORT01	|City|
+### Example - Program
+```abap
+REPORT zopen_sql_kna1_demo.
+
+* Step 1: Define structure
+TYPES: BEGIN OF ty_customer,
+         kunnr TYPE kna1-kunnr,  " Customer Number
+         name1 TYPE kna1-name1,  " Name
+         ort01 TYPE kna1-ort01,  " City
+       END OF ty_customer.
+
+* Step 2: Declare internal table and work area
+DATA: lt_customers TYPE TABLE OF ty_customer,  " List of customers
+      ls_customer  TYPE ty_customer.           " Single customer
+
+* Step 3: Fetch data using Open SQL
+SELECT kunnr name1 ort01
+  FROM kna1
+  INTO TABLE lt_customers
+  UP TO 5 ROWS.
+
+* Step 4: Display data
+LOOP AT lt_customers INTO ls_customer.
+  WRITE: / 'Customer No:', ls_customer-kunnr,
+         'Name:', ls_customer-name1,
+         'City:', ls_customer-ort01.
+ENDLOOP.
+```
+#### Open SQL Explanation
+
+| Keyword        | Meaning                                   |
+| -------------- | ----------------------------------------- |
+| `SELECT`       | I want to get data from the table         |
+| `INTO TABLE`   | Put that data into my ABAP internal table |
+| `WHERE`        | Filter the data based on a condition      |
+| `ORDER BY`     | Sort the data (e.g., by name or city)     |
+| `UP TO 5 ROWS` | Limit the number of rows you want         |
+
+
+
