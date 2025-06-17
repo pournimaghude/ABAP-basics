@@ -216,7 +216,7 @@ We use it:
 - To hold temporary data
 - While reading/writing to internal tables.
 #### Simple Real-Life Example:
-|Roll| No	Name|	Marks|                                     
+|Roll No	| Name|	Marks|                                     
 |----|--------|------|
 |101	|Pooja	|88|                                                      
 |102	|Ajay	|92|
