@@ -51,8 +51,10 @@ LOOP AT lt_products INTO wa_product.
 ENDLOOP.
 
 
-
+*---------------------------------------------------------------------
 *Example : Output looks change by using this program 
+*---------------------------------------------------------------------
+
 REPORT Z_HELLO_WORLD.
 
 TYPES: BEGIN OF ty_product,
