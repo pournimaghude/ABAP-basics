@@ -1,6 +1,36 @@
 
 *************************************************************
-* Example: Internal Table with Employee Details
+* Example 1: Internal Table with Employee Details
+*************************************************************
+TYPES: BEGIN OF ty_student,
+         rollno TYPE i,
+         name   TYPE string,
+         marks  TYPE i,
+       END OF ty_student.
+
+DATA: lt_students TYPE TABLE OF ty_student,  " Internal table
+      ls_student TYPE ty_student.            " Work area
+
+* Add student 1
+ls_student-rollno = 101.
+ls_student-name   = 'Pooja'.
+ls_student-marks  = 88.
+APPEND ls_student TO lt_students.
+
+* Add student 2
+ls_student-rollno = 102.
+ls_student-name   = 'Ajay'.
+ls_student-marks  = 92.
+APPEND ls_student TO lt_students.
+
+* Display data
+LOOP AT lt_students INTO ls_student.
+  WRITE: / ls_student-rollno, ls_student-name, ls_student-marks.
+ENDLOOP.
+
+
+*************************************************************
+* Example 2: Internal Table with Employee Details
 *************************************************************
 REPORT zemployee_table_demo.
 
