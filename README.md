@@ -190,6 +190,7 @@ ENDWHILE.
 
 ### What is an Internal Table?
 
+- Internal tables are temporary memory tables in ABAP used to store multiple rows of structured data. like an Excel sheet in memory.
 - An **internal table** in ABAP is like an **array or list** in other languages.  
 - You can store multiple rows of data in it and process them using loops.
 
@@ -208,11 +209,21 @@ ENDLOOP.
 
 ### What is a Work Area?
 
-A **work area** is a single row of structure — like one record from a table.
+- A **work area** is a single row of structure.
+-  like one row of the internal table, used for inserting or reading one row at a time.
 
 We use it:
 - To hold temporary data
 - While reading/writing to internal tables.
+#### Simple Real-Life Example:
+|Roll| No	Name|	Marks|                                     
+|----|--------|------|
+|101	|Pooja	|88|                                                      
+|102	|Ajay	|92|
+
+In ABAP:
+ - Internal Table → Whole list of students
+ - Work Area → One student’s data (one row)
 
 ### 🔸 5.1 Defining Internal Table with Structure
 
@@ -252,6 +263,40 @@ LOOP AT lt_students INTO wa_student.
          'Age:', wa_student-age.
 ENDLOOP.
 ```
+#### Example for understanding :
+``` abap
+TYPES: BEGIN OF ty_student,
+         rollno TYPE i,
+         name   TYPE string,
+         marks  TYPE i,
+       END OF ty_student.
+
+DATA: lt_students TYPE TABLE OF ty_student,  " Internal table
+      ls_student TYPE ty_student.            " Work area
+
+* Add student 1
+ls_student-rollno = 101.
+ls_student-name   = 'Pooja'.
+ls_student-marks  = 88.
+APPEND ls_student TO lt_students.
+
+* Add student 2
+ls_student-rollno = 102.
+ls_student-name   = 'Ajay'.
+ls_student-marks  = 92.
+APPEND ls_student TO lt_students.
+
+* Display data
+LOOP AT lt_students INTO ls_student.
+  WRITE: / ls_student-rollno, ls_student-name, ls_student-marks.
+ENDLOOP.
+```
+###### Key Points:
+- `TYPES ... END OF` → `define custom structure`
+- `lt_students` → `list (internal table)`
+- `ls_student` → `one row (work area)`
+- `APPEND` → `add work area to internal table`
+- `LOOP AT` → `read each row one by one`
 
 ## 🔹6. READ, MODIFY, DELETE Internal Table
 
@@ -292,3 +337,5 @@ LOOP AT lt_students INTO wa_student.
   WRITE: / wa_student-name.
 ENDLOOP.
 ```
+
+## 🧠 What is Open SQL?
