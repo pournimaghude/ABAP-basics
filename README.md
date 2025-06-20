@@ -193,7 +193,6 @@ ENDWHILE.
 - Internal tables are temporary memory tables in ABAP used to store multiple rows of structured data. like an Excel sheet in memory.
 - An **internal table** in ABAP is like an **array or list** in other languages.  
 - You can store multiple rows of data in it and process them using loops.
-
 - Use `APPEND` to add values.
 - Use `LOOP AT` to read each row one by one.
 
@@ -337,15 +336,24 @@ LOOP AT lt_students INTO wa_student.
   WRITE: / wa_student-name.
 ENDLOOP.
 ```
-
+---
+# Database Integration
 ## 🔹6. What is Open SQL?
 
 -  **Open SQL** is used in ABAP to read data from SAP database tables and store it in internal tables or variables.
 - It allows you to select, filter, sort, and join data from SAP tables like MARA, VBAK, KNA1, etc.
+- Open SQL is used to Read, Insert, Update, or Delete data from SAP standard tables (like MARA, KNA1, SKAT, etc.) inside your ABAP program.
+- Open means it works on all database types (HANA, Oracle, etc.)
 
   #### Why It's Called "Open" SQL?
   - Because it's standard and works on any SAP-supported database (Oracle, HANA, etc.)
   - ABAP handles the database-specific part internally.
+  - |Statement	|What it does|
+    |---------|-----------|
+    |SELECT	| Reads data from a database table|
+    |INSERT	| Adds new data to a table|
+    |UPDATE	| Changes data in a table|
+    |DELETE	| Deletes data from a table|
 
  ### Real-Life Example 
   **Imagine you have an Excel sheet with all customer details:**
@@ -402,6 +410,28 @@ ENDLOOP.
 | `WHERE`        | Filter the data based on a condition      |
 | `ORDER BY`     | Sort the data (e.g., by name or city)     |
 | `UP TO 5 ROWS` | Limit the number of rows you want         |
+---
+# Structure 
+# Field Symbols
+# Modularization Techniques
+- ### Includes : subroutines
+- ### function modules
+- ### includes
+- ### macros
 
+# Reports
+- ### Classical Reports
+- ### Interactive Reports
+- ### ALV Reports (List Viewer)
 
+# Dialog Programming
+- ### Screen programming (Module Pool)
+  
+# Data Dictionary (DDIC)
+- ### Tables
+- ### Views
+- ### Data Elements
+- ### Domains
+- ### Search Helps
+- ### Lock Objects
 
