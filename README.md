@@ -170,11 +170,13 @@ ENDDO.
 - Repeats code while a condition is true.
 
 #### 🔸Syntax:
-```abap
+```
+abap
 
 WHILE <condition>.
   " Code
 ENDWHILE.
+
 ```
 
 |Statement	|Use|
