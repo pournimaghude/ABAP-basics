@@ -1,80 +1,100 @@
+*-----------------------------
+*Description - LOOP AT Internal Table
+*-----------------------------
 
-*************************************************************
-* Example 1: Internal Table with Employee Details
-*************************************************************
-TYPES: BEGIN OF ty_student,
-         rollno TYPE i,
-         name   TYPE string,
-         marks  TYPE i,
-       END OF ty_student.
+DATA: lt_names TYPE TABLE OF string,
+      lv_name TYPE String.
 
-DATA: lt_students TYPE TABLE OF ty_student,  " Internal table
-      ls_student TYPE ty_student.            " Work area
+APPEND 'Riya' to lt_names.
+APPEND 'Gayatri' to lt_names.
 
-* Add student 1
-ls_student-rollno = 101.
-ls_student-name   = 'Pooja'.
-ls_student-marks  = 88.
-APPEND ls_student TO lt_students.
+LOOP at lt_names INTO lv_name.
+    WRITE: / lv_name.
 
-* Add student 2
-ls_student-rollno = 102.
-ls_student-name   = 'Ajay'.
-ls_student-marks  = 92.
-APPEND ls_student TO lt_students.
-
-* Display data
-LOOP AT lt_students INTO ls_student.
-  WRITE: / ls_student-rollno, ls_student-name, ls_student-marks.
 ENDLOOP.
 
 
-*************************************************************
-* Example 2: Internal Table with Employee Details
-*************************************************************
-REPORT zemployee_table_demo.
+*---------------------------------------------------------------------
+*Description -  Example 2: Display product details using internal table
+*---------------------------------------------------------------------
 
-TYPES: BEGIN OF ty_employee,
-         emp_id   TYPE i,
-         emp_name TYPE string,
-         salary   TYPE p DECIMALS 2,
-       END OF ty_employee.
+TYPES: BEGIN OF ty_product,
+         id    TYPE i,
+         name  TYPE string,
+         price TYPE p DECIMALS 2,
+       END OF ty_product.
 
-DATA: lt_employees TYPE TABLE OF ty_employee,
-      wa_employee  TYPE ty_employee.
+DATA: lt_products TYPE TABLE OF ty_product,
+      wa_product  TYPE ty_product.
 
-" Append 3 employees
-wa_employee-emp_id = 101.
-wa_employee-emp_name = 'Pournima'.
-wa_employee-salary = 35000.
-APPEND wa_employee TO lt_employees.
+" Add products
+wa_product-id = 1.
+wa_product-name = 'Notebook'.
+wa_product-price = 55.50.
+APPEND wa_product TO lt_products.
 
-wa_employee-emp_id = 102.
-wa_employee-emp_name = 'Gayatri'.
-wa_employee-salary = 32000.
-APPEND wa_employee TO lt_employees.
+wa_product-id = 2.
+wa_product-name = 'Pen'.
+wa_product-price = 10.00.
+APPEND wa_product TO lt_products.
 
-wa_employee-emp_id = 103.
-wa_employee-emp_name = 'Riya'.
-wa_employee-salary = 30000.
-APPEND wa_employee TO lt_employees.
+wa_product-id = 3.
+wa_product-name = 'Bag'.
+wa_product-price = 450.75.
+APPEND wa_product TO lt_products.
 
-" Read employee with ID = 102
-READ TABLE lt_employees INTO wa_employee WITH KEY emp_id = 102.
-IF sy-subrc = 0.
-  WRITE: / 'Before Update ->', wa_employee-emp_name, wa_employee-salary.
-  
-  " Modify salary
-  wa_employee-salary = 35000.
-  MODIFY lt_employees FROM wa_employee.
-ENDIF.
-
-" Delete employee with ID = 103
-DELETE lt_employees WHERE emp_id = 103.
-
-" Loop through all employees
-LOOP AT lt_employees INTO wa_employee.
-  WRITE: / 'ID:', wa_employee-emp_id,
-           'Name:', wa_employee-emp_name,
-           'Salary:', wa_employee-salary.
+" Display product list
+LOOP AT lt_products INTO wa_product.
+  WRITE: / 'Product ID:', wa_product-id,
+           'Name:', wa_product-name,
+           'Price:', wa_product-price.
 ENDLOOP.
+
+
+*---------------------------------------------------------------------
+*Example : Output looks change by using this program 
+*---------------------------------------------------------------------
+
+REPORT Z_HELLO_WORLD.
+
+TYPES: BEGIN OF ty_product,
+         id    TYPE i,
+         name  TYPE string,
+         price TYPE p DECIMALS 2,
+       END OF ty_product.
+
+DATA lt_products TYPE TABLE OF ty_product.
+DATA wa_product TYPE ty_product.
+
+" Populate products
+wa_product-id = 1. wa_product-name = 'Notebook'. wa_product-price = '55.50'. APPEND wa_product TO lt_products.
+wa_product-id = 2. wa_product-name = 'Pen'.      wa_product-price = '10.00'. APPEND wa_product TO lt_products.
+wa_product-id = 3. wa_product-name = 'Bag'.      wa_product-price = '450.75'. APPEND wa_product TO lt_products.
+
+" Display header with vertical lines and underline
+WRITE: /1 sy-vline, 'ID', 5 sy-vline, 'Name', 30 sy-vline, 'Price', 50 sy-vline.
+WRITE: /(50) sy-uline.
+
+" Loop for data rows
+FIELD-SYMBOLS <fs> TYPE ty_product.
+LOOP AT lt_products ASSIGNING <fs>.
+  WRITE: /1 sy-vline, <fs>-id LEFT-JUSTIFIED, 5 sy-vline,
+           <fs>-name LEFT-JUSTIFIED, 30 sy-vline,
+           <fs>-price RIGHT-JUSTIFIED, 50 sy-vline.
+ENDLOOP.
+
+" Fill bottom line
+WRITE: /(50) sy-uline.
+
+
+
+
+*output :- 
+  *|-------------------|------------|
+*  |ID | Name          |    Price   |
+*  |1  | Notebook      |    55.50   |
+*  |2  | Pen           |    10.00   |
+*  |3  | Bag           |    450.75  |
+*  |-------------------|------------|
+
+
