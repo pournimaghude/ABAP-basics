@@ -184,7 +184,57 @@ ENDWHILE.
 |DO	|Loop fixed number of times|
 |WHILE	|Loop until condition is false|
 |LOOP AT	|Read internal tables (covered later)|
+---
+# Structure 
+- A structure is a group of fields (data items) combined together under one name.
+- e.g., one row of a table or one form filled with multiple details.
+  
+- #### Real life example :-
+- Imagine a student form with:
+  - Roll Number
+  - Name
+  - Age
+- this is a structure,
+  ``` abap
+  Roll No: 101  
+  Name: Pournima  
+  Age: 21
+  ```
+### How to Create Structure ?
+follow given steps,
+#### 1. Define the structure:
+```abap
+TYPES: BEGIN OF ty_student,
+         rollno TYPE i,
+         name   TYPE string,
+         age    TYPE i,
+       END OF ty_student.
+```
+ I have created a structure ty_student with 3 fields: roll number, name, and age.
 
+####  2. Create a variable of that structure:
+``` abap
+DATA: lv_student TYPE ty_student.
+```
+Now I have one student (1 row) where I can store data.
+
+
+####  3. Put values inside:
+```abap
+lv_student-rollno = 101.
+lv_student-name   = 'Priya'.
+lv_student-age    = 21.
+```
+I am filling student details.
+
+####  4. Show the result:
+```abap
+WRITE: / 'Roll No:', lv_student-rollno,
+       / 'Name:',    lv_student-name,
+       / 'Age:',     lv_student-age.
+```
+- Variable	Stores one value only
+- Structure	Stores many related values
 
 ## 🔸 4.5 LOOP AT Internal Table
 
@@ -368,7 +418,7 @@ ENDLOOP.
    **SAP Table: KNA1**
    - It stores Customer Master data.
 
-|Field Name|	Meaning|
+|Field Name|	Meaning| 
 |-----------|-----|
 |KUNNR|	Customer Number|
 |NAME1	|Customer Name|
@@ -411,8 +461,48 @@ ENDLOOP.
 | `ORDER BY`     | Sort the data (e.g., by name or city)     |
 | `UP TO 5 ROWS` | Limit the number of rows you want         |
 ---
-# Structure 
+
+  
 # Field Symbols
+- A field symbol is like a pointer in ABAP.
+- It does not store data, but refers to (points to) another variable or table row, so you can use or change that data directly.
+- Field symbol is like a nickname or shortcut that points to the original data.
+  
+- **example,** Imagine you're working on a notebook:
+  - Normally, you write directly on Page 1, Page 2, etc.
+  - A field symbol is like a bookmark, it can point to Page 1 now, and later point to Page 5, etc.
+  - So instead of creating multiple variables or work areas, you can use a field symbol to point to whatever you need at runtime.
+  ###  How to Declare and Use a Field Symbol
+   ```abap
+   REPORT zfield_symbol_demo.
+
+   DATA: lt_names TYPE TABLE OF string,
+      lv_name  TYPE string.
+
+   FIELD-SYMBOLS: <fs_name> TYPE string.
+
+   * Add values to the table
+   APPEND 'Priya' TO lt_names.
+   APPEND 'Ajay' TO lt_names.
+   APPEND 'Ramesh' TO lt_names.
+
+  * Loop using field symbol
+   LOOP AT lt_names ASSIGNING <fs_name>.
+     WRITE: / 'Name:', <fs_name>.
+   ENDLOOP.
+
+   ```
+   
+  - `FIELD-SYMBOLS` → We declare a pointer called `<fs_name>`
+  - ` ASSIGNING <fs_name>` → During loop, `<fs_name>` points to each row.
+  - `<fs_name>` behaves like the row itself, we can read or change the value.
+    
+  |Without Field Symbol|	With Field Symbol|
+  |--------------------|------------------|
+  |LOOP AT lt_names INTO lv_name.|	LOOP AT lt_names ASSIGNING <fs_name>.|
+  |Use copy of data	|Work on actual memory (no copy)|
+  |Slower for big data	|Faster and more flexible|
+
 # Modularization Techniques
 - ### Includes : subroutines
 - ### function modules
