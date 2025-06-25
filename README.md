@@ -125,9 +125,8 @@ DATA: v_name TYPE c LENGTH 10,
 ## 🔹Structures, Tables, Views
 ### 1. Structure
 - A Structure is like a template or blueprint that groups related fields.
-- It does not store any data in the database.
-- Used in programs or function modules to temporarily hold data.
-  **example :**  hold material number, description, and unit in one variable group without storing it permanently.
+- It does not store any data in the database, Used in programs or function modules to temporarily hold data.
+- **example :**  hold material number, description, and unit in one variable group without storing it permanently.
   ```abap
   
   TYPES: BEGIN OF ty_material,
@@ -588,7 +587,6 @@ ENDLOOP.
 | `WHERE`        | Filter the data based on a condition      |
 | `ORDER BY`     | Sort the data (e.g., by name or city)     |
 | `UP TO 5 ROWS` | Limit the number of rows you want         |
----
 
   
 # Field Symbols
