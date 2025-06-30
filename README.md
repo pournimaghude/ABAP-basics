@@ -165,7 +165,7 @@ WRITE: / wa_mara-ernam, wa_mara-erdat.
 
     WRITE: / wa_view-matnr, wa_view-maktx.
 ```
-- ### 4. Data Elements 
+### 4. Data Elements 
   - A Data Element gives meaning to a field.
     
       - Defines the field’s label (like "Material Number"), Connects to documentation/help Can link to a search help.
@@ -183,7 +183,7 @@ WRITE: / wa_mara-ernam, wa_mara-erdat.
     - Linked Domain: MATNR_D (NUMC 18)
     - Used in tables like MARA, VBAP, etc.
       
-- ### 5. Domains
+### 5. Domains
 - A Domain defines the technical characteristics of a field, such as:
    - Data type (e.g., CHAR, NUMC, DEC)
    - Length (e.g., 10 characters, 18 digits)
