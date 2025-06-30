@@ -122,111 +122,6 @@ DATA: v_name TYPE c LENGTH 10,
       v_age TYPE i,
       v_salary TYPE p DECIMALS 2.
 ```
-## 🔹Structures, Tables, Views
-### 1. Structure
-- A Structure is like a template or blueprint that groups related fields.
-- It does not store any data in the database, Used in programs or function modules to temporarily hold data.
-- **example :**  hold material number, description, and unit in one variable group without storing it permanently.
-  ```abap
-  
-  TYPES: BEGIN OF ty_material,
-         matnr TYPE mara-matnr,
-         maktx TYPE makt-maktx,
-         meins TYPE mara-meins,
-       END OF ty_material.
-
-  DATA: wa_material TYPE ty_material.
-
-   wa_material-matnr = 'MAT123'.
-   wa_material-maktx = 'Test Material'.
-   wa_material-meins = 'PC'.
-
-    WRITE: / wa_material-matnr,
-           / wa_material-maktx,
-          / wa_material-meins.
-  ```
-
-### 2. Table
-- A table is an object in the SAP Data Dictionary that stores data in the database.
-- Each row in a table is a record, each column is a field.
-- Example: MARA, VBAK, KNA1.
-
-**Example Table: MARA (Material Master General Data)**
-| MATNR  | ERNAM   | ERDAT      |
-| ------ | ------- | ---------- |
-| MAT123 | PADMIN  | 23.06.2025 |
-| MAT124 | TESTUSR | 21.06.2025 |
-
-**read this data in ABAP like:**
-``` abap
-DATA: wa_mara TYPE mara.
-SELECT SINGLE * INTO wa_mara FROM mara WHERE matnr = 'MAT123'.
-WRITE: / wa_mara-ernam, wa_mara-erdat.
-```
-
-### 3. View
-- A view is a virtual table, created by joining multiple real tables.
-- It does not store data itself, but pulls data dynamically when accessed.
-- Used to simplify access to related data across tables.
-
-** Example View: V_MARA_MAKT**
-```abap
-  DATA: BEGIN OF wa_view,
-        matnr TYPE mara-matnr,
-        maktx TYPE makt-maktx,
-      END OF wa_view.
-
-   SELECT SINGLE matnr maktx INTO wa_view FROM v_mara_makt WHERE matnr = 'MAT123'.
-
-    WRITE: / wa_view-matnr, wa_view-maktx.
-```
-
-| Concept       | Explanation                                 | Stores Data?    | Use Case                           | Real Example           |
-|-------------  |---------------------------------------------|-----------------| ---------------------------------- | ---------------------- |
-| **Structure** | Like a group of fields (but no data stored) | ❌ No           | Temporary data storage in programs | `ty_material` in code  |
-| **Table**     | Physically stores data in DB                | ✅ Yes          | Actual database storage            | `MARA`, `VBAK`, `KNA1` |
-| **View**      | Virtual table, used to read joined data     | ❌ No (virtual) | Join of tables for easy access     | `V_MARA_MAKT` (custom) |
-
-## Domains vs Data Elements
-###  Domain
-- A Domain defines the technical characteristics of a field, such as:
-   - Data type (e.g., CHAR, NUMC, DEC)
-   - Length (e.g., 10 characters, 18 digits)
-   - Allowed values (value range or fixed values)
-- **Real-World Example:**
-   -  Form field: "Enter 10-digit number", That’s a domain: NUMC 10 – it tells you to type only numbers, max 10 digits.
-     
-   -  You don’t know what the number is for (ID? Phone? etc.), just the technical rule.
- - **SAP Example (Domain):**
-    - Domain: MATNR_D
-    - Type: NUMC
-    - Length: 18
-    - No decimals
-    - Used for many material number fields
-      
-### Data Elements 
-  - A Data Element gives meaning to a field.
-    
-      - Defines the field’s label (like "Material Number"), Connects to documentation/help Can link to a search help.
-        
-- **Real-World Example:**
-   -  Label: “Mobile Number” → this is a data element.
-     
-   -  It tells the user: this 10-digit number is a mobile number.
-     
-   -  So the label/meaning is added on top of the domain.
-     
-- **SAP Example (Data Element):**
-    - Data Element: MATNR
-    - Label: "Material Number"
-    - Linked Domain: MATNR_D (NUMC 18)
-    - Used in tables like MARA, VBAP, etc.
-      
-| Concept          | Purpose                          | Example in SAP           |
-| ---------------- | -------------------------------- | ------------------------ |
-| **Domain**       | Technical details (type, length) | `MATNR_D`: NUMC 18       |
-| **Data Element** | Meaning + Label + Domain Link    | `MATNR`: Material Number |
-
 
 ## 🔹Constants and Parameters
 
@@ -644,10 +539,123 @@ ENDLOOP.
 - ### Screen programming (Module Pool)
   
 # Data Dictionary (DDIC)
+The Data Dictionary (DDIC) is like the blueprint or design of all the data used in SAP. It defines the structure, types, and relationships of data.
+- **Real-World Example:**
+Think of a table like an Excel sheet that stores product data. For example, MARA stores material master data.
+- **Coding Example**
+
+``` abap
+DATA: lt_mara TYPE TABLE OF mara,
+      wa_mara TYPE mara.
+
+SELECT * FROM mara INTO TABLE lt_mara UP TO 10 ROWS.
+
+LOOP AT lt_mara INTO wa_mara.
+  WRITE: / wa_mara-matnr, wa_mara-mtart.
+ENDLOOP.
+```
+### 1. Structure
+- A Structure is like a template or blueprint that groups related fields.
+- It does not store any data in the database, Used in programs or function modules to temporarily hold data.
+- **example :**  hold material number, description, and unit in one variable group without storing it permanently.
+  ```abap
+  
+  TYPES: BEGIN OF ty_material,
+         matnr TYPE mara-matnr,
+         maktx TYPE makt-maktx,
+         meins TYPE mara-meins,
+       END OF ty_material.
+
+  DATA: wa_material TYPE ty_material.
+
+   wa_material-matnr = 'MAT123'.
+   wa_material-maktx = 'Test Material'.
+   wa_material-meins = 'PC'.
+
+    WRITE: / wa_material-matnr,
+           / wa_material-maktx,
+          / wa_material-meins.
+  ```
+  
 - ### Tables
+- A table is an object in the SAP Data Dictionary that stores data in the database.
+- Each row in a table is a record, each column is a field.
+- Example: MARA, VBAK, KNA1.
+
+**Example Table: MARA (Material Master General Data)**
+| MATNR  | ERNAM   | ERDAT      |
+| ------ | ------- | ---------- |
+| MAT123 | PADMIN  | 23.06.2025 |
+| MAT124 | TESTUSR | 21.06.2025 |
+
+**read this data in ABAP like:**
+``` abap
+DATA: wa_mara TYPE mara.
+SELECT SINGLE * INTO wa_mara FROM mara WHERE matnr = 'MAT123'.
+WRITE: / wa_mara-ernam, wa_mara-erdat.
+```
+
+| Concept       | Explanation                                 | Stores Data?    | Use Case                           | Real Example           |
+|-------------  |---------------------------------------------|-----------------| ---------------------------------- | ---------------------- |
+| **Structure** | Like a group of fields (but no data stored) | ❌ No           | Temporary data storage in programs | `ty_material` in code  |
+| **Table**     | Physically stores data in DB                | ✅ Yes          | Actual database storage            | `MARA`, `VBAK`, `KNA1` |
+| **View**      | Virtual table, used to read joined data     | ❌ No (virtual) | Join of tables for easy access     | `V_MARA_MAKT` (custom) |
+
 - ### Views
-- ### Data Elements
+- A view is a virtual table, created by joining multiple real tables.
+- It does not store data itself, but pulls data dynamically when accessed.
+- Used to simplify access to related data across tables.
+
+** Example View: V_MARA_MAKT**
+```abap
+  DATA: BEGIN OF wa_view,
+        matnr TYPE mara-matnr,
+        maktx TYPE makt-maktx,
+      END OF wa_view.
+
+   SELECT SINGLE matnr maktx INTO wa_view FROM v_mara_makt WHERE matnr = 'MAT123'.
+
+    WRITE: / wa_view-matnr, wa_view-maktx.
+```
+- ### Data Elements 
+  - A Data Element gives meaning to a field.
+    
+      - Defines the field’s label (like "Material Number"), Connects to documentation/help Can link to a search help.
+        
+- **Real-World Example:**
+   -  Label: “Mobile Number” → this is a data element.
+     
+   -  It tells the user: this 10-digit number is a mobile number.
+     
+   -  So the label/meaning is added on top of the domain.
+     
+- **SAP Example (Data Element):**
+    - Data Element: MATNR
+    - Label: "Material Number"
+    - Linked Domain: MATNR_D (NUMC 18)
+    - Used in tables like MARA, VBAP, etc.
+      
 - ### Domains
+- A Domain defines the technical characteristics of a field, such as:
+   - Data type (e.g., CHAR, NUMC, DEC)
+   - Length (e.g., 10 characters, 18 digits)
+   - Allowed values (value range or fixed values)
+- **Real-World Example:**
+   -  Form field: "Enter 10-digit number", That’s a domain: NUMC 10 – it tells you to type only numbers, max 10 digits.
+     
+   -  You don’t know what the number is for (ID? Phone? etc.), just the technical rule.
+ - **SAP Example (Domain):**
+    - Domain: MATNR_D
+    - Type: NUMC
+    - Length: 18
+    - No decimals
+    - Used for many material number fields
+      
+      
+| Concept          | Purpose                          | Example in SAP           |
+| ---------------- | -------------------------------- | ------------------------ |
+| **Domain**       | Technical details (type, length) | `MATNR_D`: NUMC 18       |
+| **Data Element** | Meaning + Label + Domain Link    | `MATNR`: Material Number |
 - ### Search Helps
 - ### Lock Objects
 
