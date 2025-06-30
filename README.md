@@ -92,6 +92,208 @@ REPORT zhello_world.
 
 WRITE 'Hello, SAP World!'.
 ```
+# Data Dictionary (DDIC)
+The Data Dictionary (DDIC) is like the blueprint or design of all the data used in SAP. It defines the structure, types, and relationships of data.
+- **Real-World Example:**
+Think of a table like an Excel sheet that stores product data. For example, MARA stores material master data.
+- **Coding Example**
+
+``` abap
+DATA: lt_mara TYPE TABLE OF mara,
+      wa_mara TYPE mara.
+
+SELECT * FROM mara INTO TABLE lt_mara UP TO 10 ROWS.
+
+LOOP AT lt_mara INTO wa_mara.
+  WRITE: / wa_mara-matnr, wa_mara-mtart.
+ENDLOOP.
+```
+### 1. Structure
+- A Structure is like a template or blueprint that groups related fields.
+- It does not store any data in the database, Used in programs or function modules to temporarily hold data.
+- **example :**  hold material number, description, and unit in one variable group without storing it permanently.
+  ```abap
+  
+  TYPES: BEGIN OF ty_material,
+         matnr TYPE mara-matnr,
+         maktx TYPE makt-maktx,
+         meins TYPE mara-meins,
+       END OF ty_material.
+
+  DATA: wa_material TYPE ty_material.
+
+   wa_material-matnr = 'MAT123'.
+   wa_material-maktx = 'Test Material'.
+   wa_material-meins = 'PC'.
+
+    WRITE: / wa_material-matnr,
+           / wa_material-maktx,
+          / wa_material-meins.
+  ```
+  
+### 2. Tables
+- A table is an object in the SAP Data Dictionary that stores data in the database.
+- Each row in a table is a record, each column is a field.
+- Example: MARA, VBAK, KNA1.
+
+**Example Table: MARA (Material Master General Data)**
+| MATNR  | ERNAM   | ERDAT      |
+| ------ | ------- | ---------- |
+| MAT123 | PADMIN  | 23.06.2025 |
+| MAT124 | TESTUSR | 21.06.2025 |
+
+**read this data in ABAP like:**
+``` abap
+DATA: wa_mara TYPE mara.
+SELECT SINGLE * INTO wa_mara FROM mara WHERE matnr = 'MAT123'.
+WRITE: / wa_mara-ernam, wa_mara-erdat.
+```
+
+### 3. Views
+- A view is a virtual table, created by joining multiple real tables.
+- It does not store data itself, but pulls data dynamically when accessed.
+- Used to simplify access to related data across tables.
+
+** Example View: V_MARA_MAKT**
+```abap
+  DATA: BEGIN OF wa_view,
+        matnr TYPE mara-matnr,
+        maktx TYPE makt-maktx,
+      END OF wa_view.
+
+   SELECT SINGLE matnr maktx INTO wa_view FROM v_mara_makt WHERE matnr = 'MAT123'.
+
+    WRITE: / wa_view-matnr, wa_view-maktx.
+```
+- ### 4. Data Elements 
+  - A Data Element gives meaning to a field.
+    
+      - Defines the field’s label (like "Material Number"), Connects to documentation/help Can link to a search help.
+        
+- **Real-World Example:**
+   -  Label: “Mobile Number” → this is a data element.
+     
+   -  It tells the user: this 10-digit number is a mobile number.
+     
+   -  So the label/meaning is added on top of the domain.
+     
+- **SAP Example (Data Element):**
+    - Data Element: MATNR
+    - Label: "Material Number"
+    - Linked Domain: MATNR_D (NUMC 18)
+    - Used in tables like MARA, VBAP, etc.
+      
+- ### 5. Domains
+- A Domain defines the technical characteristics of a field, such as:
+   - Data type (e.g., CHAR, NUMC, DEC)
+   - Length (e.g., 10 characters, 18 digits)
+   - Allowed values (value range or fixed values)
+- **Real-World Example:**
+   -  Form field: "Enter 10-digit number", That’s a domain: NUMC 10 – it tells you to type only numbers, max 10 digits.
+     
+   -  You don’t know what the number is for (ID? Phone? etc.), just the technical rule.
+ - **SAP Example (Domain):**
+    - Domain: MATNR_D
+    - Type: NUMC
+    - Length: 18
+    - No decimals
+    - Used for many material number fields
+      
+| **Concept**      | **Explanation**                                         | **Stores Data?** | **Use Case**                           | **Real Example**           |
+| ---------------- | ------------------------------------------------------- | ---------------- | -------------------------------------- | -------------------------- |
+| **Structure**    | Like a group of fields (but no data stored)             | ❌ No             | Temporary data format in ABAP programs | `ty_material` in code      |
+| **Table**        | Physically stores data in the database                  | ✅ Yes            | Actual database storage                | `MARA`, `VBAK`, `KNA1`     |
+| **View**         | Virtual table used to read joined or filtered data      | ❌ No (virtual)   | Join of tables for simplified access   | Custom view: `V_MARA_MAKT` |
+| **Domain**       | Defines technical data type and value range (CHAR, INT) | ❌ No             | Controls input format, length, limits  | `MATNR` domain (length 18) |
+| **Data Element** | Describes meaning and labels of fields                  | ❌ No             | Provides field labels, documentation   | `MATNR` (Material Number)  |
+
+# Open SQL
+### What is Open SQL?
+ - **Open SQL** is a simplified version of SQL used in ABAP programs to communicate with SAP database tables.
+ - It hides database-specific details and lets you access transparent tables, views, or pool/cluster tables using simple syntax.
+   
+  #### Why “Open” SQL??
+  - “Open” means platform-independent.
+  - SAP systems run on different databases (Oracle, HANA, MSSQL...), but you don’t need to change your SQL — SAP handles the conversion behind the scenes.
+  - example,
+    
+| Statement | Purpose                       | Example                                   |
+| --------- | ----------------------------- | ----------------------------------------- |
+| `SELECT`  | Read data from database table | `SELECT * FROM mara INTO TABLE lt_mara.`  |
+| `INSERT`  | Add new records               | `INSERT mara FROM wa_mara.`               |
+| `UPDATE`  | Modify existing records       | `UPDATE mara SET mtart = 'HALB'.`         |
+| `DELETE`  | Remove records                | `DELETE FROM mara WHERE matnr = '10001'.` |
+|`INTO TABLE`| Put all records in an internal table | Like filling a basket             |
+|` INTO wa`| One record into a work area    | Hold one item in your hand               |
+| `WHERE `  | Filter your data               | Only FERT-type materials                 |
+| `JOIN`   | Combine multiple tables        | Get both material number + description   |
+
+
+
+| Rule                | Explanation                                                              |
+| ------------------- | ------------------------------------------------------------------------ |
+| Always use `INTO`   | Store results into internal table or work area                           |
+| Use `WHERE` clause  | Avoid reading full table – it's performance-friendly                     |
+| Use `SELECT SINGLE` | Only when expecting **one record**                                       |
+| Use `INNER JOIN`    | To combine data from multiple tables                                     |
+| Use `SY-LANGU`      | To get user-specific language data from text tables like `MAKT`, `T001T` |
+
+
+ ### Real-Life Example 
+  **Imagine you have an Excel sheet with all customer details:**
+|Customer No|Name|	City|
+|-----------|-----|------|
+|1001|	Ramesh	|Pune|
+|1002|	Suresh|	Mumbai|
+|1003|	Priya|	Delhi|
+  - In SAP, this customer data is stored in a table like KNA1.
+  - You can use Open SQL in ABAP to get this data and show it in your program.
+
+   **SAP Table: KNA1**
+   - It stores Customer Master data.
+
+|Field Name|	Meaning| 
+|-----------|-----|
+|KUNNR|	Customer Number|
+|NAME1	|Customer Name|
+|ORT01	|City|
+### Example - Program
+```abap
+REPORT zopen_sql_kna1_demo.
+
+* Step 1: Define structure
+TYPES: BEGIN OF ty_customer,
+         kunnr TYPE kna1-kunnr,  " Customer Number
+         name1 TYPE kna1-name1,  " Name
+         ort01 TYPE kna1-ort01,  " City
+       END OF ty_customer.
+
+* Step 2: Declare internal table and work area
+DATA: lt_customers TYPE TABLE OF ty_customer,  " List of customers
+      ls_customer  TYPE ty_customer.           " Single customer
+
+* Step 3: Fetch data using Open SQL
+SELECT kunnr name1 ort01
+  FROM kna1
+  INTO TABLE lt_customers
+  UP TO 5 ROWS.
+
+* Step 4: Display data
+LOOP AT lt_customers INTO ls_customer.
+  WRITE: / 'Customer No:', ls_customer-kunnr,
+         'Name:', ls_customer-name1,
+         'City:', ls_customer-ort01.
+ENDLOOP.
+```
+#### Open SQL Explanation
+
+| Keyword        | Meaning                                   |
+| -------------- | ----------------------------------------- |
+| `SELECT`       | I want to get data from the table         |
+| `INTO TABLE`   | Put that data into my ABAP internal table |
+| `WHERE`        | Filter the data based on a condition      |
+| `ORDER BY`     | Sort the data (e.g., by name or city)     |
+| `UP TO 5 ROWS` | Limit the number of rows you want         |
 
 ## 🔹Data Types in ABAP
 
@@ -410,78 +612,7 @@ ENDLOOP.
 ```
 ---
 # Database Integration
-## 🔹6. What is Open SQL?
 
--  **Open SQL** is used in ABAP to read data from SAP database tables and store it in internal tables or variables.
-- It allows you to select, filter, sort, and join data from SAP tables like MARA, VBAK, KNA1, etc.
-- Open SQL is used to Read, Insert, Update, or Delete data from SAP standard tables (like MARA, KNA1, SKAT, etc.) inside your ABAP program.
-- Open means it works on all database types (HANA, Oracle, etc.)
-
-  #### Why It's Called "Open" SQL?
-  - Because it's standard and works on any SAP-supported database (Oracle, HANA, etc.)
-  - ABAP handles the database-specific part internally.
-  - |Statement	|What it does|
-    |---------|-----------|
-    |SELECT	| Reads data from a database table|
-    |INSERT	| Adds new data to a table|
-    |UPDATE	| Changes data in a table|
-    |DELETE	| Deletes data from a table|
-
- ### Real-Life Example 
-  **Imagine you have an Excel sheet with all customer details:**
-|Customer No|Name|	City|
-|-----------|-----|------|
-|1001|	Ramesh	|Pune|
-|1002|	Suresh|	Mumbai|
-|1003|	Priya|	Delhi|
-  - In SAP, this customer data is stored in a table like KNA1.
-  - You can use Open SQL in ABAP to get this data and show it in your program.
-
-   **SAP Table: KNA1**
-   - It stores Customer Master data.
-
-|Field Name|	Meaning| 
-|-----------|-----|
-|KUNNR|	Customer Number|
-|NAME1	|Customer Name|
-|ORT01	|City|
-### Example - Program
-```abap
-REPORT zopen_sql_kna1_demo.
-
-* Step 1: Define structure
-TYPES: BEGIN OF ty_customer,
-         kunnr TYPE kna1-kunnr,  " Customer Number
-         name1 TYPE kna1-name1,  " Name
-         ort01 TYPE kna1-ort01,  " City
-       END OF ty_customer.
-
-* Step 2: Declare internal table and work area
-DATA: lt_customers TYPE TABLE OF ty_customer,  " List of customers
-      ls_customer  TYPE ty_customer.           " Single customer
-
-* Step 3: Fetch data using Open SQL
-SELECT kunnr name1 ort01
-  FROM kna1
-  INTO TABLE lt_customers
-  UP TO 5 ROWS.
-
-* Step 4: Display data
-LOOP AT lt_customers INTO ls_customer.
-  WRITE: / 'Customer No:', ls_customer-kunnr,
-         'Name:', ls_customer-name1,
-         'City:', ls_customer-ort01.
-ENDLOOP.
-```
-#### Open SQL Explanation
-
-| Keyword        | Meaning                                   |
-| -------------- | ----------------------------------------- |
-| `SELECT`       | I want to get data from the table         |
-| `INTO TABLE`   | Put that data into my ABAP internal table |
-| `WHERE`        | Filter the data based on a condition      |
-| `ORDER BY`     | Sort the data (e.g., by name or city)     |
-| `UP TO 5 ROWS` | Limit the number of rows you want         |
 
   
 # Field Symbols
@@ -538,124 +669,7 @@ ENDLOOP.
 # Dialog Programming
 - ### Screen programming (Module Pool)
   
-# Data Dictionary (DDIC)
-The Data Dictionary (DDIC) is like the blueprint or design of all the data used in SAP. It defines the structure, types, and relationships of data.
-- **Real-World Example:**
-Think of a table like an Excel sheet that stores product data. For example, MARA stores material master data.
-- **Coding Example**
 
-``` abap
-DATA: lt_mara TYPE TABLE OF mara,
-      wa_mara TYPE mara.
-
-SELECT * FROM mara INTO TABLE lt_mara UP TO 10 ROWS.
-
-LOOP AT lt_mara INTO wa_mara.
-  WRITE: / wa_mara-matnr, wa_mara-mtart.
-ENDLOOP.
-```
-### 1. Structure
-- A Structure is like a template or blueprint that groups related fields.
-- It does not store any data in the database, Used in programs or function modules to temporarily hold data.
-- **example :**  hold material number, description, and unit in one variable group without storing it permanently.
-  ```abap
-  
-  TYPES: BEGIN OF ty_material,
-         matnr TYPE mara-matnr,
-         maktx TYPE makt-maktx,
-         meins TYPE mara-meins,
-       END OF ty_material.
-
-  DATA: wa_material TYPE ty_material.
-
-   wa_material-matnr = 'MAT123'.
-   wa_material-maktx = 'Test Material'.
-   wa_material-meins = 'PC'.
-
-    WRITE: / wa_material-matnr,
-           / wa_material-maktx,
-          / wa_material-meins.
-  ```
-  
-- ### Tables
-- A table is an object in the SAP Data Dictionary that stores data in the database.
-- Each row in a table is a record, each column is a field.
-- Example: MARA, VBAK, KNA1.
-
-**Example Table: MARA (Material Master General Data)**
-| MATNR  | ERNAM   | ERDAT      |
-| ------ | ------- | ---------- |
-| MAT123 | PADMIN  | 23.06.2025 |
-| MAT124 | TESTUSR | 21.06.2025 |
-
-**read this data in ABAP like:**
-``` abap
-DATA: wa_mara TYPE mara.
-SELECT SINGLE * INTO wa_mara FROM mara WHERE matnr = 'MAT123'.
-WRITE: / wa_mara-ernam, wa_mara-erdat.
-```
-
-| Concept       | Explanation                                 | Stores Data?    | Use Case                           | Real Example           |
-|-------------  |---------------------------------------------|-----------------| ---------------------------------- | ---------------------- |
-| **Structure** | Like a group of fields (but no data stored) | ❌ No           | Temporary data storage in programs | `ty_material` in code  |
-| **Table**     | Physically stores data in DB                | ✅ Yes          | Actual database storage            | `MARA`, `VBAK`, `KNA1` |
-| **View**      | Virtual table, used to read joined data     | ❌ No (virtual) | Join of tables for easy access     | `V_MARA_MAKT` (custom) |
-
-- ### Views
-- A view is a virtual table, created by joining multiple real tables.
-- It does not store data itself, but pulls data dynamically when accessed.
-- Used to simplify access to related data across tables.
-
-** Example View: V_MARA_MAKT**
-```abap
-  DATA: BEGIN OF wa_view,
-        matnr TYPE mara-matnr,
-        maktx TYPE makt-maktx,
-      END OF wa_view.
-
-   SELECT SINGLE matnr maktx INTO wa_view FROM v_mara_makt WHERE matnr = 'MAT123'.
-
-    WRITE: / wa_view-matnr, wa_view-maktx.
-```
-- ### Data Elements 
-  - A Data Element gives meaning to a field.
-    
-      - Defines the field’s label (like "Material Number"), Connects to documentation/help Can link to a search help.
-        
-- **Real-World Example:**
-   -  Label: “Mobile Number” → this is a data element.
-     
-   -  It tells the user: this 10-digit number is a mobile number.
-     
-   -  So the label/meaning is added on top of the domain.
-     
-- **SAP Example (Data Element):**
-    - Data Element: MATNR
-    - Label: "Material Number"
-    - Linked Domain: MATNR_D (NUMC 18)
-    - Used in tables like MARA, VBAP, etc.
-      
-- ### Domains
-- A Domain defines the technical characteristics of a field, such as:
-   - Data type (e.g., CHAR, NUMC, DEC)
-   - Length (e.g., 10 characters, 18 digits)
-   - Allowed values (value range or fixed values)
-- **Real-World Example:**
-   -  Form field: "Enter 10-digit number", That’s a domain: NUMC 10 – it tells you to type only numbers, max 10 digits.
-     
-   -  You don’t know what the number is for (ID? Phone? etc.), just the technical rule.
- - **SAP Example (Domain):**
-    - Domain: MATNR_D
-    - Type: NUMC
-    - Length: 18
-    - No decimals
-    - Used for many material number fields
-      
-      
-| Concept          | Purpose                          | Example in SAP           |
-| ---------------- | -------------------------------- | ------------------------ |
-| **Domain**       | Technical details (type, length) | `MATNR_D`: NUMC 18       |
-| **Data Element** | Meaning + Label + Domain Link    | `MATNR`: Material Number |
 - ### Search Helps
 - ### Lock Objects
 
