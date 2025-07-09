@@ -42,11 +42,11 @@ Here are some important things you can build using ABAP:
 |  Task |  Description |
 |--------|----------------|
 | Reports | Create custom reports like sales summary, stock reports, etc. |
-| Forms | Design output forms like invoices and purchase orders |
+| Forms | Design output forms like invoices and purchase orders |    
 | Data Upload/Download | Upload data using BDC, LSMW, or download to Excel |
 | ALV Reports | Interactive, formatted reports for end users |
 | Enhancements | Add new features to existing SAP programs |
-| Custom Programs | Write your own logic to handle business processes |
+| Custom Programs | Write your own logic to handle business processes |    
 | Interfaces | Connect SAP to other systems using IDocs, BAPIs, RFCs |
 | CDS Views | Define reusable database views for analytics (SAP HANA) |
 | OData Services | Create services for SAP Fiori or mobile apps |
