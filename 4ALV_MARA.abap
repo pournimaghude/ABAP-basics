@@ -1,6 +1,6 @@
 REPORT zar_calling_usual_abap_class.
 
-TYPE-POOLS: slis.  " ✅ This is the magic line
+TYPE-POOLS: slis. 
 
 TABLES: mara.
 
