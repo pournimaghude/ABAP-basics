@@ -1,5 +1,15 @@
+REPORT z_practice_prgrm.
 
-*Example - Pass_by_Ref - pass_by_ref both actual and formal parameter should be refering same memory location
+"Basic Example
+DATA: a_user TYPE String VALUE ' Pournima'.
+PERFORM greeting_user.
+
+
+FORM greeting_user.
+  WRITE: / 'HELLO', a_user, 'Welocme to ABAP WORLD'.
+ENDFORM.
+
+*Example 1 - Pass_by_Ref - pass_by_ref both actual and formal parameter should be refering same memory location
 " so if made any changes to Formal Parameter the actual Parameter also get change
 
 DATA a TYPE i.
@@ -14,7 +24,7 @@ FORM pass_by_ref USING f_a.
 ENDFORM.
 
 
-*Example - Pass_by_Value - it is both actual and formal parameter refering Separate memory location
+*Example 2 - Pass_by_Value - it is both actual and formal parameter refering Separate memory location
 " so if made any changes to Formal parameter it would not affect Actual parameter
 
 DATA b TYPE i.
@@ -29,7 +39,7 @@ FORM pass_by_value USING VALUE(F_b)."FORMAL PRAMETER
   f_b = f_b + 10.
 ENDFORM.
 
-**Example - Pass_by_value_and_Return - both actual and formal parameter separate memory space but,
+**Example 3- Pass_by_value_and_Return - both actual and formal parameter separate memory space but,
 *          "if any change made to formal parameter the actual parameter would change like pass_by_ref
 
 
