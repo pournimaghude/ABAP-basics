@@ -17,15 +17,14 @@ CLASS zcl_sap_hello_world_demo IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
 
-    DATA(lv_sum) = 0.
-    DATA(lv_count) = 1.
+      DATA(lv_number) = 7.
 
-    DO 10 TIMES.
-      lv_sum = lv_sum + lv_count.
-      lv_count = lv_count + 1.
-    ENDDO.
+  IF lv_number MOD 2 = 0.
+    out->write( |{ lv_number } is Even| ).
+  ELSE.
+    out->write( |{ lv_number } is Odd| ).
+  ENDIF.
 
-    out->write( |total sum is { lv_sum }| ).
   ENDMETHOD.
 
 ENDCLASS.
